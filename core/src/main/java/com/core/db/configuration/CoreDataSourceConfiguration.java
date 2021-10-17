@@ -22,7 +22,7 @@ import javax.sql.DataSource;
         , entityManagerFactoryRef = "otherEntityManagerFactory"
         , transactionManagerRef = "otherTransactionManager"
 )
-public class CoreDataSourceConfig {
+public class CoreDataSourceConfiguration {
 
     @Bean(name = "coreDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.core")
