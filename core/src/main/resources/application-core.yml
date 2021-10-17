@@ -8,7 +8,7 @@ server:
 ---
 ## quartz
 spring:
-  profile: local
+  profile: core
 
   datasource:
     initialization-mode: never # always 초기화 이후 never 로 변경
