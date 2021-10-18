@@ -1,6 +1,7 @@
 package com.core.db.configuration;
 
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -19,16 +20,18 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"com.core.repository"}
-        , entityManagerFactoryRef = "otherEntityManagerFactory"
-        , transactionManagerRef = "otherTransactionManager"
+        , entityManagerFactoryRef = "coreEntityManagerFactory"
+        , transactionManagerRef = "coreTransactionManager"
 )
 public class CoreDataSourceConfiguration {
 
     @Bean(name = "coreDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.core")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.core")
     @Qualifier("coreEntityManagerFactory")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create()
+                .type(HikariDataSource.class)
+                .build();
     }
 
     @Bean(name = "coreEntityManagerFactory")

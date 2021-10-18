@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: core
 
 server:
   port: 8001
@@ -11,13 +11,14 @@ spring:
   profile: core
 
   datasource:
-    initialization-mode: never # always 초기화 이후 never 로 변경
+    initialization-mode: always # always 초기화 이후 never 로 변경
     schema: classpath:db/schema.sql
-    core:
-      jdbc-url: jdbc:h2:tcp://localhost/~/core
-      username: sa
-      password:
-      driver-class-name: org.h2.Driver
+    hikari:
+      core:
+        jdbc-url: jdbc:h2:tcp://localhost/~/core
+        username: sa
+        password:
+        driver-class-name: org.h2.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
