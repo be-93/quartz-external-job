@@ -1,5 +1,5 @@
 rootProject.name = 'quartz'
-include 'schedule'
+include 'scheduler'
 include 'job'
 include 'core'
 

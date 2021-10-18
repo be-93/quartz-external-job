@@ -23,7 +23,6 @@ buildscript {
 
 allprojects {
     group 'com.quartz'
-    version '1.0-SNAPSHOT'
 }
 
 subprojects {
@@ -76,11 +75,18 @@ project(":core") {
     }
 }
 
-project(":schedule") {
+project(":scheduler") {
     dependencies {
         compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
     }
+
+    task deployJar(type: Copy) {
+        dependsOn('jar')
+        from "$buildDir/libs/job.jar"
+        into "/tmp/job-repository/"
+    }
+
     bootJar {
         enabled = false
     }
@@ -91,8 +97,10 @@ project(":schedule") {
 
 project(":job") {
     dependencies {
-        compile project(':schedule')
+        compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
+        implementation 'org.springframework.boot:spring-boot-starter-quartz'
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     }
     bootJar {
         enabled = false
