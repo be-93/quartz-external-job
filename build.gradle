@@ -56,6 +56,8 @@ project(":core") {
         annotationProcessor "jakarta.persistence:jakarta.persistence-api"
         annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 
+        compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
         runtimeOnly 'org.postgresql:postgresql'
@@ -79,6 +81,7 @@ project(":scheduler") {
     dependencies {
         compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
+        compileOnly "org.springframework.boot:spring-boot-configuration-processor"
     }
 
     task deployJar(type: Copy) {
@@ -95,12 +98,25 @@ project(":scheduler") {
     }
 }
 
-project(":job") {
+project(":batch") {
     dependencies {
         compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    }
+    bootJar {
+        enabled = false
+    }
+    jar {
+        enabled = true
+    }
+}
+
+project(":api") {
+    dependencies {
+        compile project(':scheduler')
+        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
     bootJar {
         enabled = false
