@@ -2,9 +2,6 @@ spring:
   profiles:
     active: local
 ---
-server:
-  port: 8009
-
 spring:
   config:
     activate:
@@ -20,7 +17,7 @@ spring:
 
   quartz:
     overwrite-existing-jobs: true
-    scheduler-name: external-scheduler
+    scheduler-name: scheduler
     jdbc:
       initialize-schema: always # always 초기화 이후 never 로 변경
       schema: classpath:db/schema.sql

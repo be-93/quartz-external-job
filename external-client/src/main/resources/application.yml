@@ -8,7 +8,7 @@ spring:
       on-profile: local
 
   datasource:
-    jdbc-url: jdbc:h2:tcp://localhost/~/core
+    url: jdbc:h2:tcp://localhost/~/client
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -16,7 +16,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

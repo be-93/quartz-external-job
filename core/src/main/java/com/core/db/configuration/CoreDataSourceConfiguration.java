@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+/*
 
 @Configuration
 @EnableTransactionManagement
@@ -23,7 +24,9 @@ import javax.sql.DataSource;
         , entityManagerFactoryRef = "coreEntityManagerFactory"
         , transactionManagerRef = "coreTransactionManager"
 )
+*/
 public class CoreDataSourceConfiguration {
+/*
 
     @Bean(name = "coreDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.hikari.core")
@@ -49,5 +52,6 @@ public class CoreDataSourceConfiguration {
             @Qualifier("coreEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
+*/
 
 }
