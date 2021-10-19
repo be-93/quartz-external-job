@@ -16,9 +16,9 @@ public class InitRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         JobKey jobKey = JobKey.jobKey("jobkey1", "jobgroup1");
-        JobDetail jobDetail = buildJobDetail(jobKey);
-        Trigger trigger = buildJobTrigger(jobKey);
-        scheduler.scheduleJob(jobDetail, trigger);
+//        JobDetail jobDetail = buildJobDetail(jobKey);
+//        Trigger trigger = buildJobTrigger(jobKey);
+//        scheduler.scheduleJob(jobDetail, trigger);
     }
 
     private JobDetail buildJobDetail(JobKey jobKey) throws ClassNotFoundException {

@@ -1,3 +1,0 @@
-spring.quartz:
-  scheduler-name: external-scheduler
-  overwrite-existing-jobs: true
