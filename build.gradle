@@ -15,7 +15,6 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
-
         // for QueryDSL
         classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}"
     }
@@ -43,12 +42,21 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-test'
 
     }
+
+    bootJar { enabled = false }
+    jar { enabled = true }
+    test { useJUnitPlatform() }
 }
 
-project(":core") {
+def querydslProjects = [
+        project(':core'),
+        project(':external-client')
+]
+
+configure(querydslProjects) {
+
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
         // for QueryDSL
         implementation "com.querydsl:querydsl-core:${queryDslVersion}"
         implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
@@ -60,19 +68,31 @@ project(":core") {
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
         runtimeOnly 'org.postgresql:postgresql'
     }
-    bootJar {
-        enabled = false
+
+    def querydslDir = "src/main/generated"
+
+    sourceSets {
+        main.java.srcDirs += [ querydslDir ]
     }
-    jar {
-        enabled = true
+
+    tasks.withType(JavaCompile) {
+        options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
     }
-    test {
-        useJUnitPlatform()
+
+    clean {
+        file(querydslDir).deleteDir()
     }
-    // for QueryDSL
-    task cleanGeneatedDir(type: Delete) {
-        delete file('src/main/generated')
+
+}
+
+project(":core") {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+        runtimeOnly 'org.postgresql:postgresql'
     }
+
 }
 
 project(":scheduler") {
@@ -88,12 +108,6 @@ project(":scheduler") {
         into "/tmp/job-repository/"
     }
 
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
-    }
 }
 
 project(":batch") {
@@ -103,41 +117,14 @@ project(":batch") {
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     }
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
-    }
 }
 
 project(":external-client") {
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        // for QueryDSL
-        implementation "com.querydsl:querydsl-core:${queryDslVersion}"
-        implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-        annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jpa"
-        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
         runtimeOnly 'org.postgresql:postgresql'
-    }
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
-    }
-    test {
-        useJUnitPlatform()
-    }
-    // for QueryDSL
-    task cleanGeneatedDir(type: Delete) {
-        delete file('src/main/generated')
     }
 }
 
@@ -146,11 +133,5 @@ project(":api") {
         compile project(':scheduler')
         compile project(':external-client')
         implementation 'org.springframework.boot:spring-boot-starter-web'
-    }
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
     }
 }
