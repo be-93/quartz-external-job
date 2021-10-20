@@ -8,13 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/scheduler")
 public class SchedulerController {
 
-    @Value("${spring.datasource.url}")
-    private String str;
-
     @GetMapping(value = "/jobs", produces = MediaType.APPLICATION_JSON_VALUE)
     public String findAllJob() {
 
-        return str;
+        return "str";
     }
 
 }
