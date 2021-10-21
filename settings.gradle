@@ -3,5 +3,6 @@ include 'scheduler'
 include 'batch'
 include 'core'
 include 'api'
-include 'external-client'
+include 'external-server'
+include 'internal-server'
 

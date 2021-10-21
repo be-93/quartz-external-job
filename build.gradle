@@ -50,7 +50,9 @@ subprojects {
 
 def querydslProjects = [
         project(':core'),
-        project(':external-client')
+        project(':internal-server'),
+        project(':external-server')
+
 ]
 
 configure(querydslProjects) {
@@ -63,13 +65,9 @@ configure(querydslProjects) {
         annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jpa"
         annotationProcessor "jakarta.persistence:jakarta.persistence-api"
         annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-
-        runtimeOnly 'com.h2database:h2'
-        runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-        runtimeOnly 'org.postgresql:postgresql'
     }
 
-    def querydslDir = "src/main/generated"
+    def querydslDir = "$buildDir/generated"
 
     sourceSets {
         main.java.srcDirs += [ querydslDir ]
@@ -88,9 +86,6 @@ configure(querydslProjects) {
 project(":core") {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        runtimeOnly 'com.h2database:h2'
-        runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-        runtimeOnly 'org.postgresql:postgresql'
     }
 
 }
@@ -119,8 +114,19 @@ project(":batch") {
     }
 }
 
-project(":external-client") {
+project(":internal-server") {
     dependencies {
+        compile project(':core')
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+        runtimeOnly 'org.postgresql:postgresql'
+    }
+}
+
+project(":external-server") {
+    dependencies {
+        compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-web'
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
@@ -131,7 +137,8 @@ project(":external-client") {
 project(":api") {
     dependencies {
         compile project(':scheduler')
-        compile project(':external-client')
+        compile project(':external-server')
+        compile project(':internal-server')
         implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }
