@@ -1,9 +1,9 @@
 package com.external.repository;
 
-import com.external.entity.ClientTest;
+import com.external.entity.ExternalTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientTestRepository extends JpaRepository<ClientTest, Long> {
+public interface ExternalTestRepository extends JpaRepository<ExternalTest, Long> {
 }

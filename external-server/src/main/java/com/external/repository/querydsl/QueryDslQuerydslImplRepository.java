@@ -1,12 +1,14 @@
-package com.core.repository.custom;
+package com.external.repository.querydsl;
 
-import com.core.entity.CoreTest;
 import com.core.jpa.querydsl.QueryDslRepositorySupportWrapper;
+import com.external.entity.ExternalTest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+
+import static com.external.entity.QExternalTest.externalTest;
 
 @Repository
 public class QueryDslQuerydslImplRepository extends QueryDslRepositorySupportWrapper implements QueryDslCustomRepository {
@@ -25,8 +27,7 @@ public class QueryDslQuerydslImplRepository extends QueryDslRepositorySupportWra
     }
 
     @Override
-    public List<CoreTest> findAllCoreTest() {
-        return null;
-//        return factory.selectFrom(QCore)
+    public List<ExternalTest> findAllExternalTest() {
+        return factory.selectFrom(externalTest).fetch();
     }
 }

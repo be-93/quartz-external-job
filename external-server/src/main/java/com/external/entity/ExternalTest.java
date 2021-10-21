@@ -9,16 +9,16 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "client_test")
+@Table(name = "external_test")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClientTest {
+public class ExternalTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Builder(builderMethodName = "clientBuilder")
-    public ClientTest(int id) {
+    @Builder(builderMethodName = "externalBuilder")
+    public ExternalTest(int id) {
         this.id = id;
     }
 
