@@ -1,4 +1,4 @@
-package com.core.entity;
+package com.internal.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,16 +9,16 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "core_test")
+@Table(name = "internal_test")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CoreTest {
+public class InternalTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Builder(builderMethodName = "coreBuilder")
-    public CoreTest(int id) {
+    @Builder(builderMethodName = "internalBuilder")
+    public InternalTest(int id) {
         this.id = id;
     }
 
