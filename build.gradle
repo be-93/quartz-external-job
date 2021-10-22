@@ -34,10 +34,6 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-test'
 
     }
-
-    bootJar { enabled = false }
-    jar { enabled = true }
-    test { useJUnitPlatform() }
 }
 
 def querydslProjects = [
@@ -81,7 +77,9 @@ project(":core") {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
     }
-
+    bootJar { enabled = false }
+    jar { enabled = true }
+    test { useJUnitPlatform() }
 }
 
 project(":scheduler") {
@@ -90,6 +88,10 @@ project(":scheduler") {
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         compileOnly "org.springframework.boot:spring-boot-configuration-processor"
     }
+
+//    bootJar { enabled = true }
+//    jar { enabled = true }
+//    test { useJUnitPlatform() }
 
     task deployJar(type: Copy) {
         dependsOn('jar')
