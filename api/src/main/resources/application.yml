@@ -1,2 +1,7 @@
 server:
-  port: 8000
+  port: 8005
+
+spring:
+  config:
+    import:
+      - file:scheduler/src/main/resources/application.yml

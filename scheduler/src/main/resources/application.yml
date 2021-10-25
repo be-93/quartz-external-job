@@ -6,18 +6,14 @@ spring:
   config:
     activate:
       on-profile: local
-
   datasource:
-#    initialization-mode: always # always 초기화 이후 never 로 변경
-#    schema: classpath:db/schema.sql
+    schema: classpath:db/schema.sql
+    initialization-mode: always # always 초기화 이후 never 로 변경
     url: jdbc:h2:tcp://localhost/~/scheduler
-      username: sa
-      password:
-      driver-class-name: org.h2.Driver
+    username: sa
+    password: #local - password
+    driver-class-name: org.h2.Driver
 
   quartz:
     overwrite-existing-jobs: true
     scheduler-name: scheduler
-    jdbc:
-      initialize-schema: always # always 초기화 이후 never 로 변경
-      schema: classpath:db/schema.sql

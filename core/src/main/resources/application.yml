@@ -1,0 +1,45 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  internal:
+    datasource:
+      hikari:
+        jdbc-url: jdbc:h2:tcp://localhost/~/internal
+        username: sa
+        password: #local - password
+        minimum-idle: 10
+        maximum-pool-size: 10
+        driver-class-name: org.h2.Driver
+
+  external:
+    datasource:
+      hikari:
+        jdbc-url: jdbc:h2:tcp://localhost/~/external
+        username: sa
+        password: #local - password
+        minimum-idle: 10
+        maximum-pool-size: 10
+        driver-class-name: org.h2.Driver
+
+  scheduler:
+    datasource:
+      hikari:
+        jdbc-url: jdbc:h2:tcp://localhost/~/scheduler
+        username: sa
+        password: #local - password
+        minimum-idle: 10
+        maximum-pool-size: 10
+        driver-class-name: org.h2.Driver
+    quartz:
+      overwrite-existing-jobs: true
+      scheduler-name: scheduler
+      jdbc:
+        initialize-schema: always # always 초기화 이후 never 로 변경
+        schema: classpath:db/schema.sql
