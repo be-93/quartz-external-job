@@ -1,5 +1,6 @@
 package com.core.db;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
@@ -10,6 +11,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+@Slf4j
 public class DataSourceFactory {
 
     public DataSourceProperties dataSourceProperties(DataSourceProperty properties) {
@@ -18,7 +20,9 @@ public class DataSourceFactory {
         dataSourceProperties.setUrl(properties.getUrl());
         dataSourceProperties.setName(properties.getUsername());
         dataSourceProperties.setPassword(properties.getPassword());
-        return new DataSourceProperties();
+        log.info("driver-class-name {} , url {}, username {}"
+                , properties.getDriverClassName(), properties.getUrl(), properties.getUsername());
+        return dataSourceProperties;
     }
 
     public DataSource dataSource(DataSourceProperty properties) {
