@@ -1,6 +1,5 @@
 package com.batchUtils;
 
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.SchedulerException;
@@ -10,10 +9,11 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+
 import java.util.*;
 
-import static com.core.utils.NullSafetyUtils.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static com.core.utils.NullSafetyUtils.isEmpty;
+import static com.core.utils.NullSafetyUtils.nullSafetyMap;
 
 public class JobUtils {
 

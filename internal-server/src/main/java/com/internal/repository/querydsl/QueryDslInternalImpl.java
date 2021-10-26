@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static com.internal.entity.QInternalTest.internalTest;
@@ -20,10 +21,11 @@ public class QueryDslInternalImpl extends QueryDslRepositorySupportWrapper imple
     private EntityManager entityManager;
     private JPAQueryFactory factory;
 
+    @PersistenceContext(unitName = "internal")
     public void setEntityManager(EntityManager entityManager) {
+        super.setEntityManager(entityManager);
         this.entityManager = entityManager;
         factory = new JPAQueryFactory(entityManager);
-        super.setEntityManager(entityManager);
     }
 
     @Override

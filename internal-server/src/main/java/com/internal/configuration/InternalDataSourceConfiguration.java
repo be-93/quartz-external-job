@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,21 +39,23 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
         dataSourceProperties.setUrl(internalDataSourceProperty.getJdbcUrl());
         dataSourceProperties.setUsername(internalDataSourceProperty.getUsername());
         dataSourceProperties.setPassword(internalDataSourceProperty.getPassword());
-        log.info("[internalDataSourceProperties] driver-class-name : {} , url : {}, username : {}"
-                , internalDataSourceProperty.getDriverClassName(), internalDataSourceProperty.getJdbcUrl(), internalDataSourceProperty.getUsername());
+        log.info("[internalDataSourceProperties] driver-class-name : {} , url : {}, username : {}",
+                internalDataSourceProperty.getDriverClassName(), internalDataSourceProperty.getJdbcUrl(), internalDataSourceProperty.getUsername());
         return dataSourceProperties;
     }
 
     @Primary
     @Bean(name = "internalDataSource")
     public DataSource dataSource(@Qualifier("internalDataSourceProperties") DataSourceProperties properties) {
-        return this.getDataSource(properties);
+        return this.generateDataSource(properties);
     }
 
     @Primary
     @Bean(name = "internalEntityManagerFactoryBuilder")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
-        return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = getHibernateJpaVendorAdapter();
+        JpaProperties jpaProperties = getJpaProperties();
+        return this.generateEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
     }
 
     @Primary
@@ -60,14 +63,37 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("internalEntityManagerFactoryBuilder") EntityManagerFactoryBuilder builder
             , @Qualifier("internalDataSource") DataSource dataSource) {
-        return this.getEntityManagerFactory(builder, dataSource, "com.internal.entity", "internal");
+        return this.generateEntityManagerFactory(builder, dataSource,
+                internalJpaProperty.getEntityPath(), internalJpaProperty.getPersistenceUnitName());
     }
 
     @Primary
     @Bean(name = "internalTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("internalEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return this.getTransactionManager(entityManagerFactory);
+        return this.generateTransactionManager(entityManagerFactory);
+    }
+
+    private HibernateJpaVendorAdapter getHibernateJpaVendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setShowSql(internalJpaProperty.isShowSql());
+        hibernateJpaVendorAdapter.setDatabasePlatform(internalJpaProperty.getDatabasePlatform());
+        return hibernateJpaVendorAdapter;
+    }
+
+    private JpaProperties getJpaProperties() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("hibernate.format_sql", String.valueOf(internalJpaProperty.isFormatSql()));
+        map.put("hibernate", new HashMap<String, String>().put("ddl-auto",internalJpaProperty.getDdlAuto()));
+        map.put("format_sql", internalJpaProperty.getDdlAuto());
+        map.put("ddl-auto", String.valueOf(internalJpaProperty.isFormatSql()));
+
+        JpaProperties jpaProperties = new JpaProperties();
+        jpaProperties.setDatabasePlatform(internalJpaProperty.getDatabasePlatform());
+        jpaProperties.setShowSql(internalJpaProperty.isShowSql());
+        jpaProperties.setProperties(map);
+
+        return jpaProperties;
     }
 
 }

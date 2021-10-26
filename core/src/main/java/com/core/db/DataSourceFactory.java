@@ -1,6 +1,5 @@
 package com.core.db;
 
-import com.core.yml.DataSourceProperty;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -9,15 +8,17 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Map;
 
 @Slf4j
 public class DataSourceFactory {
 
-    public DataSource getDataSource(DataSourceProperties properties) {
+    public DataSource generateDataSource(DataSourceProperties properties) {
         HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
         dataSource.setDataSource(new LazyConnectionDataSourceProxy(properties
                                 .initializeDataSourceBuilder()
@@ -25,8 +26,13 @@ public class DataSourceFactory {
         return dataSource;
     }
 
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(EntityManagerFactoryBuilder builder
-            , DataSource dataSource, String entityPath, String persistenceUnitName) {
+    public EntityManagerFactoryBuilder generateEntityManagerFactoryBuilder(
+            HibernateJpaVendorAdapter hibernateJpaVendorAdapter, Map<String, String> hashMap) {
+        return new EntityManagerFactoryBuilder(hibernateJpaVendorAdapter, hashMap, null);
+    }
+    
+    public LocalContainerEntityManagerFactoryBean generateEntityManagerFactory(
+            EntityManagerFactoryBuilder builder, DataSource dataSource, String entityPath, String persistenceUnitName) {
         return builder
                 .dataSource(dataSource)
                 .packages(entityPath)
@@ -34,7 +40,7 @@ public class DataSourceFactory {
                 .build();
     }
 
-    public PlatformTransactionManager getTransactionManager(EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager generateTransactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 

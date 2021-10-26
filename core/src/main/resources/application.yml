@@ -17,6 +17,13 @@ spring:
         minimum-idle: 10
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
+      jpa:
+        persistence-unit-name: internal
+        entity-path: com.internal.entity
+        database-platform: org.hibernate.dialect.H2Dialect
+        ddl-auto: create-drop
+        format-sql: true # 쿼리 형태를 보정
+        show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
     external:
       hikari:
@@ -26,6 +33,13 @@ spring:
         minimum-idle: 10
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
+      jpa:
+        persistence-unit-name: external
+        entity-path: com.external.entity
+        database-platform: org.hibernate.dialect.H2Dialect
+        ddl-auto: create-drop
+        format-sql: true # 쿼리 형태를 보정
+        show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
     scheduler:
       hikari:
@@ -42,10 +56,5 @@ spring:
         initialize-schema: always # always 초기화 이후 never 로 변경
         schema: classpath:db/schema.sql
 
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug

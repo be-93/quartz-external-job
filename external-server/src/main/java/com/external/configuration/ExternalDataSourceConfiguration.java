@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -25,7 +24,7 @@ import java.util.HashMap;
         , entityManagerFactoryRef = "externalEntityManagerFactory"
         , transactionManagerRef = "externalTransactionManager"
 )
-public class ExternalDataSourceConfiguration extends DataSourceFactory{
+public class ExternalDataSourceConfiguration extends DataSourceFactory {
 
     final private ExternalDataSourceProperty externalDataSourceProperty;
 
@@ -36,14 +35,14 @@ public class ExternalDataSourceConfiguration extends DataSourceFactory{
         dataSourceProperties.setUrl(externalDataSourceProperty.getJdbcUrl());
         dataSourceProperties.setUsername(externalDataSourceProperty.getUsername());
         dataSourceProperties.setPassword(externalDataSourceProperty.getPassword());
-        log.info("[externalDataSourceProperties] driver-class-name : {} , url : {}, username : {}"
-                , externalDataSourceProperty.getDriverClassName(), externalDataSourceProperty.getJdbcUrl(), externalDataSourceProperty.getUsername());
+        log.info("[externalDataSourceProperties] driver-class-name : {} , url : {}, username : {}",
+                externalDataSourceProperty.getDriverClassName(), externalDataSourceProperty.getJdbcUrl(), externalDataSourceProperty.getUsername());
         return dataSourceProperties;
     }
 
     @Bean(name = "externalDataSource")
     public DataSource dataSource(@Qualifier("externalDataSourceProperties") DataSourceProperties properties) {
-        return this.getDataSource(properties);
+        return this.generateDataSource(properties);
     }
 
     @Bean(name = "externalEntityManagerFactoryBuilder")
@@ -55,13 +54,13 @@ public class ExternalDataSourceConfiguration extends DataSourceFactory{
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("externalEntityManagerFactoryBuilder") EntityManagerFactoryBuilder builder
             , @Qualifier("externalDataSource") DataSource dataSource) {
-        return this.getEntityManagerFactory(builder, dataSource, "com.external.entity", "external");
+        return this.generateEntityManagerFactory(builder, dataSource, "com.external.entity", "external");
     }
 
     @Bean(name = "externalTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("externalEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return this.getTransactionManager(entityManagerFactory);
+        return this.generateTransactionManager(entityManagerFactory);
     }
 
 }
