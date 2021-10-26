@@ -12,7 +12,7 @@ public class DataSourceProperty {
     protected String jdbcUrl;
     @NotNull
     protected String username;
-    @NotNull
+//    @NotNull
     protected String password;
     @NotNull
     protected String driverClassName;
