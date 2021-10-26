@@ -21,7 +21,6 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-//@PropertySource(value = "classpath:application.yml")
 @EnableJpaRepositories(basePackages = {"com.internal.repository"}
         , entityManagerFactoryRef = "internalEntityManagerFactory"
         , transactionManagerRef = "internalTransactionManager"
@@ -29,6 +28,7 @@ import java.util.HashMap;
 public class InternalDataSourceConfiguration extends DataSourceFactory {
 
     final private InternalDataSourceProperty internalDataSourceProperty;
+    final private InternalJpaProperty internalJpaProperty;
 
     @Primary
     @Bean(name = "internalDataSourceProperties")

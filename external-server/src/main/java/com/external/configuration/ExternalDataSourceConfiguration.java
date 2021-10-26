@@ -21,7 +21,6 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-//@PropertySource(value = "classpath:application.yml")
 @EnableJpaRepositories(basePackages = {"com.external.repository"}
         , entityManagerFactoryRef = "externalEntityManagerFactory"
         , transactionManagerRef = "externalTransactionManager"
