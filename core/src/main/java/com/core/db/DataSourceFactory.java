@@ -1,7 +1,9 @@
 package com.core.db;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -15,8 +17,14 @@ import javax.sql.DataSource;
 public class DataSourceFactory {
 
     public DataSource getDataSource(DataSourceProperties properties) {
-        LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy = new LazyConnectionDataSourceProxy(properties.initializeDataSourceBuilder().build());
-        return lazyConnectionDataSourceProxy;
+        HikariDataSource dataSource = DataSourceBuilder
+                .create()
+                .type(HikariDataSource.class)
+                .build();
+        dataSource.setDataSource(new LazyConnectionDataSourceProxy(properties
+                                .initializeDataSourceBuilder()
+                                .build()));
+        return dataSource;
     }
 
     public DataSourceProperties dataSourceProperties(DataSourceProperty properties) {
