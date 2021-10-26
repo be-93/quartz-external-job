@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SchedulerController {
 
-    final private ExternalService externalService;
     final private InternalService internalService;
+    final private ExternalService externalService;
 
     @GetMapping(value = "/jobs", produces = MediaType.APPLICATION_JSON_VALUE)
     public String findAllJob() {
-        externalService.findAllExternalTest();
         internalService.findAllInternalTest();
+        externalService.findAllExternalTest();
         return "str";
     }
 

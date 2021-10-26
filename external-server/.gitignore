@@ -30,4 +30,4 @@ rebel.xml
 .gradle
 /build/
 .gradletasknamecache
-/generated/
+generated
