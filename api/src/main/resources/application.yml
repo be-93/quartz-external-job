@@ -3,5 +3,4 @@ server:
 
 spring:
   config:
-    import:
-      - file:scheduler/src/main/resources/application.yml
+    import: file:core/src/main/resources/application.yml

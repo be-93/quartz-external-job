@@ -8,8 +8,8 @@ spring:
     activate:
       on-profile: local
 
-  internal:
-    datasource:
+  datasource:
+    internal:
       hikari:
         jdbc-url: jdbc:h2:tcp://localhost/~/internal
         username: sa
@@ -18,8 +18,7 @@ spring:
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
 
-  external:
-    datasource:
+    external:
       hikari:
         jdbc-url: jdbc:h2:tcp://localhost/~/external
         username: sa
@@ -28,8 +27,7 @@ spring:
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
 
-  scheduler:
-    datasource:
+    scheduler:
       hikari:
         jdbc-url: jdbc:h2:tcp://localhost/~/scheduler
         username: sa
@@ -43,3 +41,11 @@ spring:
       jdbc:
         initialize-schema: always # always 초기화 이후 never 로 변경
         schema: classpath:db/schema.sql
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true

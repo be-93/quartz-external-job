@@ -14,27 +14,28 @@ import javax.sql.DataSource;
 @Slf4j
 public class DataSourceFactory {
 
-    public DataSourceProperties dataSourceProperties(DataSourceProperty properties) {
-        DataSourceProperties dataSourceProperties = new DataSourceProperties();
-        dataSourceProperties.setDriverClassName(properties.getDriverClassName());
-        dataSourceProperties.setUrl(properties.getUrl());
-        dataSourceProperties.setName(properties.getUsername());
-        dataSourceProperties.setPassword(properties.getPassword());
-        log.info("driver-class-name {} , url {}, username {}"
-                , properties.getDriverClassName(), properties.getUrl(), properties.getUsername());
-        return dataSourceProperties;
-    }
-
-    public DataSource dataSource(DataSourceProperty properties) {
-        LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy = new LazyConnectionDataSourceProxy(this.dataSourceProperties(properties).initializeDataSourceBuilder().build());
+    public DataSource getDataSource(DataSourceProperties properties) {
+        LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy = new LazyConnectionDataSourceProxy(properties.initializeDataSourceBuilder().build());
         return lazyConnectionDataSourceProxy;
     }
 
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(EntityManagerFactoryBuilder builder, DataSourceProperty properties, String entityPath) {
+    public DataSourceProperties dataSourceProperties(DataSourceProperty properties) {
+        DataSourceProperties dataSourceProperties = new DataSourceProperties();
+        dataSourceProperties.setDriverClassName(properties.getDriverClassName());
+        dataSourceProperties.setUrl(properties.getJdbcUrl());
+        dataSourceProperties.setName(properties.getUsername());
+        dataSourceProperties.setPassword(properties.getPassword());
+        log.info("[DataSourceFactory] driver-class-name {} , url {}, username {}"
+                , properties.getDriverClassName(), properties.getJdbcUrl(), properties.getUsername());
+        return dataSourceProperties;
+    }
+
+    public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(EntityManagerFactoryBuilder builder
+            , DataSource dataSource, String entityPath, String persistenceUnitName) {
         return builder
-                .dataSource(this.dataSource(properties))
+                .dataSource(dataSource)
                 .packages(entityPath)
-                .persistenceUnit("other")
+                .persistenceUnit(persistenceUnitName)
                 .build();
     }
 

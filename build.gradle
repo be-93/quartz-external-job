@@ -132,9 +132,9 @@ project(":external-server") {
 
 project(":api") {
     dependencies {
-//        compile project(':scheduler')
+        compile project(':scheduler')
         compile project(':internal-server')
-//        compile project(':external-server')
+        compile project(':external-server')
         implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }
