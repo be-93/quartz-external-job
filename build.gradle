@@ -33,9 +33,6 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         implementation 'org.springframework.boot:spring-boot-starter-test'
     }
-
-    bootJar { enabled = false }
-    jar { enabled = true }
     test { useJUnitPlatform() }
 }
 
@@ -79,6 +76,8 @@ project(":core") {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     }
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
 
 project(":scheduler") {
@@ -96,7 +95,8 @@ project(":scheduler") {
         from "$buildDir/libs/job.jar"
         into "/tmp/job-repository/"
     }
-
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
 
 project(":batch") {
@@ -106,6 +106,8 @@ project(":batch") {
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     }
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
 
 project(":internal-server") {
@@ -117,6 +119,8 @@ project(":internal-server") {
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
         runtimeOnly 'org.postgresql:postgresql'
     }
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
 
 project(":external-server") {
@@ -128,6 +132,8 @@ project(":external-server") {
         runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
         runtimeOnly 'org.postgresql:postgresql'
     }
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
 
 project(":api") {
@@ -137,4 +143,6 @@ project(":api") {
         compile project(':external-server')
         implementation 'org.springframework.boot:spring-boot-starter-web'
     }
+    bootJar { enabled = true }
+    jar { enabled = false}
 }
