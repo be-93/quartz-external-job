@@ -1,5 +1,6 @@
 package com.core.db;
 
+import com.core.yml.DataSourceProperty;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -17,25 +18,11 @@ import javax.sql.DataSource;
 public class DataSourceFactory {
 
     public DataSource getDataSource(DataSourceProperties properties) {
-        HikariDataSource dataSource = DataSourceBuilder
-                .create()
-                .type(HikariDataSource.class)
-                .build();
+        HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
         dataSource.setDataSource(new LazyConnectionDataSourceProxy(properties
                                 .initializeDataSourceBuilder()
                                 .build()));
         return dataSource;
-    }
-
-    public DataSourceProperties dataSourceProperties(DataSourceProperty properties) {
-        DataSourceProperties dataSourceProperties = new DataSourceProperties();
-        dataSourceProperties.setDriverClassName(properties.getDriverClassName());
-        dataSourceProperties.setUrl(properties.getJdbcUrl());
-        dataSourceProperties.setName(properties.getUsername());
-        dataSourceProperties.setPassword(properties.getPassword());
-        log.info("[DataSourceFactory] driver-class-name {} , url {}, username {}"
-                , properties.getDriverClassName(), properties.getJdbcUrl(), properties.getUsername());
-        return dataSourceProperties;
     }
 
     public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(EntityManagerFactoryBuilder builder

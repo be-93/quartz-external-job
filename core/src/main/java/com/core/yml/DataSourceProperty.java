@@ -1,4 +1,4 @@
-package com.core.db;
+package com.core.yml;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
