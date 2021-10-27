@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -63,8 +64,10 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("internalEntityManagerFactoryBuilder") EntityManagerFactoryBuilder builder
             , @Qualifier("internalDataSource") DataSource dataSource) {
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", internalJpaProperty.getDdlAuto());
         return this.generateEntityManagerFactory(builder, dataSource,
-                internalJpaProperty.getEntityPath(), internalJpaProperty.getPersistenceUnitName());
+                internalJpaProperty.getEntityPath(), internalJpaProperty.getPersistenceUnitName(), properties);
     }
 
     @Primary
@@ -84,15 +87,10 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     private JpaProperties getJpaProperties() {
         HashMap<String, String> map = new HashMap<>();
         map.put("hibernate.format_sql", String.valueOf(internalJpaProperty.isFormatSql()));
-        map.put("hibernate", new HashMap<String, String>().put("ddl-auto",internalJpaProperty.getDdlAuto()));
-        map.put("format_sql", internalJpaProperty.getDdlAuto());
-        map.put("ddl-auto", String.valueOf(internalJpaProperty.isFormatSql()));
-
         JpaProperties jpaProperties = new JpaProperties();
         jpaProperties.setDatabasePlatform(internalJpaProperty.getDatabasePlatform());
         jpaProperties.setShowSql(internalJpaProperty.isShowSql());
         jpaProperties.setProperties(map);
-
         return jpaProperties;
     }
 

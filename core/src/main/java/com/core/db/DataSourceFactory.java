@@ -32,11 +32,13 @@ public class DataSourceFactory {
     }
     
     public LocalContainerEntityManagerFactoryBean generateEntityManagerFactory(
-            EntityManagerFactoryBuilder builder, DataSource dataSource, String entityPath, String persistenceUnitName) {
+            EntityManagerFactoryBuilder builder, DataSource dataSource
+            , String entityPath, String persistenceUnitName, Map<String, Object> properties) {
         return builder
                 .dataSource(dataSource)
                 .packages(entityPath)
                 .persistenceUnit(persistenceUnitName)
+                .properties(properties)
                 .build();
     }
 
