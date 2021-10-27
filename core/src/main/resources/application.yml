@@ -41,6 +41,8 @@ spring:
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
+    ## internal 설정을 의존성을 가지도록 설정
+    ## 다른 디비에 의존해야 한다면 데이터소스 생성하여 주입하여야함.
     scheduler:
       hikari:
         jdbc-url: jdbc:h2:tcp://localhost/~/scheduler
@@ -49,12 +51,17 @@ spring:
         minimum-idle: 10
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
-    quartz:
-      overwrite-existing-jobs: true
-      scheduler-name: scheduler
-      jdbc:
-        initialize-schema: always # always 초기화 이후 never 로 변경
-        schema: classpath:db/schema.sql
+  quartz:
+    overwrite-existing-jobs: true
+    scheduler-name: scheduler
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always # always 초기화 이후 never 로 변경
+      schema: classpath:db/schema.sql
+
+
+
+
 
 logging.level:
   org.hibernate.SQL: debug
