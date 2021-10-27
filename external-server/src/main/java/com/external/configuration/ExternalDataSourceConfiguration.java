@@ -1,10 +1,13 @@
 package com.external.configuration;
 
 import com.core.db.DataSourceFactory;
+import com.external.yml.ExternalDataSourceProperty;
+import com.external.yml.ExternalJpaProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 public class ExternalDataSourceConfiguration extends DataSourceFactory {
 
     final private ExternalDataSourceProperty externalDataSourceProperty;
+    final private ExternalJpaProperty externalJpaProperty;
 
     @Bean(name = "externalDataSourceProperties")
     public DataSourceProperties getDataSourceProperties() {
@@ -47,20 +51,42 @@ public class ExternalDataSourceConfiguration extends DataSourceFactory {
 
     @Bean(name = "externalEntityManagerFactoryBuilder")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
-        return new EntityManagerFactoryBuilder(new HibernateJpaVendorAdapter(), new HashMap<>(), null);
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = getHibernateJpaVendorAdapter();
+        JpaProperties jpaProperties = getJpaProperties();
+        return this.generateEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
     }
 
     @Bean(name = "externalEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("externalEntityManagerFactoryBuilder") EntityManagerFactoryBuilder builder
             , @Qualifier("externalDataSource") DataSource dataSource) {
-        return this.generateEntityManagerFactory(builder, dataSource, "com.external.entity", "external");
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", externalJpaProperty.getDdlAuto());
+        return this.generateEntityManagerFactory(builder, dataSource,
+                externalJpaProperty.getEntityPath(), externalJpaProperty.getPersistenceUnitName(), properties);
     }
 
     @Bean(name = "externalTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("externalEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return this.generateTransactionManager(entityManagerFactory);
+    }
+
+    private HibernateJpaVendorAdapter getHibernateJpaVendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setShowSql(externalJpaProperty.isShowSql());
+        hibernateJpaVendorAdapter.setDatabasePlatform(externalJpaProperty.getDatabasePlatform());
+        return hibernateJpaVendorAdapter;
+    }
+
+    private JpaProperties getJpaProperties() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("hibernate.format_sql", String.valueOf(externalJpaProperty.isFormatSql()));
+        JpaProperties jpaProperties = new JpaProperties();
+        jpaProperties.setDatabasePlatform(externalJpaProperty.getDatabasePlatform());
+        jpaProperties.setShowSql(externalJpaProperty.isShowSql());
+        jpaProperties.setProperties(map);
+        return jpaProperties;
     }
 
 }
