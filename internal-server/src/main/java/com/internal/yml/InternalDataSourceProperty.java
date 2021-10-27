@@ -1,4 +1,4 @@
-package com.internal.configuration;
+package com.internal.yml;
 
 import com.core.yml.DataSourceProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
