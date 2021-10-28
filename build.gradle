@@ -83,6 +83,7 @@ project(":core") {
 project(":scheduler") {
     dependencies {
         compile project(':core')
+        compile project(':batch')
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         runtimeOnly 'com.h2database:h2'
@@ -101,7 +102,6 @@ project(":scheduler") {
 
 project(":batch") {
     dependencies {
-        compile project(':core')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
