@@ -5,4 +5,5 @@ include 'core'
 include 'api'
 include 'external-server'
 include 'internal-server'
+include 'job'
 

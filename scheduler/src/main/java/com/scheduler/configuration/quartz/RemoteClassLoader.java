@@ -1,4 +1,4 @@
-package com.scheduler.configuration;
+package com.scheduler.configuration.quartz;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
 @Component
 public class RemoteClassLoader {
 
-    private static final String JOB_REPOSITORY = "/tmp/job-repository/job.jar";
+    private static final String JOB_REPOSITORY = "/tmp/job-repository/batch.jar";
 
     @SuppressWarnings("unchecked")
     public <T> Class<? extends T> loadClass(String name, Class<T> clazz) throws ClassNotFoundException {

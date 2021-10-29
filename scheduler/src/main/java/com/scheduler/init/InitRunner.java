@@ -1,6 +1,6 @@
 package com.scheduler.init;
 
-import com.scheduler.configuration.RemoteClassLoader;
+import com.scheduler.configuration.quartz.RemoteClassLoader;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.springframework.boot.CommandLineRunner;
@@ -15,10 +15,10 @@ public class InitRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        JobKey jobKey = JobKey.jobKey("jobkey1", "jobgroup1");
-//        JobDetail jobDetail = buildJobDetail(jobKey);
-//        Trigger trigger = buildJobTrigger(jobKey);
-//        scheduler.scheduleJob(jobDetail, trigger);
+        JobKey jobKey = JobKey.jobKey("job1", null);
+        JobDetail jobDetail = buildJobDetail(jobKey);
+        Trigger trigger = buildJobTrigger(jobKey);
+        scheduler.scheduleJob(jobDetail, trigger);
     }
 
     private JobDetail buildJobDetail(JobKey jobKey) throws ClassNotFoundException {

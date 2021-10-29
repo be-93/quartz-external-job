@@ -111,6 +111,21 @@ project(":batch") {
     jar { enabled = true }
 }
 
+project(":job") {
+    dependencies {
+        compile project(':batch')
+        implementation 'org.springframework.boot:spring-boot-starter-batch'
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    }
+    bootJar { enabled = false }
+    jar { enabled = true }
+    task deployJar(type: Copy) {
+        dependsOn('jar')
+        from "$buildDir/libs/job.jar"
+        into "/scheduler/tmp/job-repository/"
+    }
+}
+
 project(":internal-server") {
     dependencies {
         compile project(':core')
