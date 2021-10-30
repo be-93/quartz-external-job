@@ -1,5 +1,6 @@
-package com.batch.batchUtils;
+package com.scheduler.batch.batchUtils;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -13,24 +14,24 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import static com.scheduler.batch.batchUtils.JobUtils.getQuartzJobName;
+import static com.scheduler.batch.batchUtils.JobUtils.getQuartzJobParameters;
 
 
 @Slf4j
+@RequiredArgsConstructor
 public class BatchJobExecutor implements Job {
 
-    @Autowired
-    private JobLocator jobLocator;
-
-    @Autowired
-    private JobLauncher jobLauncher;
+    private final JobLocator jobLocator;
+    private final JobLauncher jobLauncher;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
-            String jobName = JobUtils.getQuartzJobName(context.getMergedJobDataMap());
+            String jobName = getQuartzJobName(context.getMergedJobDataMap());
             log.info("[{}] started.", jobName);
-            JobParameters jobParameters = JobUtils.getQuartzJobParameters(context);
+            JobParameters jobParameters = getQuartzJobParameters(context);
             jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
             log.info("[{}] completed.", jobName);
         } catch (NoSuchJobException | JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException | SchedulerException e) {

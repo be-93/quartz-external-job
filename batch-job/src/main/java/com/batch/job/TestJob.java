@@ -20,15 +20,15 @@ public class TestJob {
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job simpleJob() {
-        return jobBuilderFactory.get("TestJob")
-                .start(simpleStep1())
+    public Job job1() {
+        return jobBuilderFactory.get("job1")
+                .start(step1())
                 .build();
     }
 
     @Bean
-    public Step simpleStep1() {
-        return stepBuilderFactory.get("TestJobStep1")
+    public Step step1() {
+        return stepBuilderFactory.get("step1")
                 .tasklet((contribution, chunkContext) -> {
                     log.info(">>>>> This is Step1");
                     return RepeatStatus.FINISHED;

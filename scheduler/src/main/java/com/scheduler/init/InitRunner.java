@@ -26,7 +26,7 @@ public class InitRunner implements CommandLineRunner {
         jobDataMap.put("key1", "value1");
         jobDataMap.put("key2", 2);
 
-        return JobBuilder.newJob(remoteClassLoader.loadClass("com.batch.batchUtils.BatchJobExecutor", Job.class))
+        return JobBuilder.newJob(remoteClassLoader.loadClass("com.scheduler.batch.batchUtils.BatchJobExecutor", Job.class))
                 .withIdentity(jobKey)
                 .withDescription("Simple Quartz Job Detail")
                 .usingJobData(jobDataMap)

@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
 @Component
 public class RemoteClassLoader {
 
-    private static final String JOB_REPOSITORY = "/tmp/job-repository/batch.jar";
+    private static final String JOB_REPOSITORY = "/tmp/job-repository/batch-job.jar";
 
     @SuppressWarnings("unchecked")
     public <T> Class<? extends T> loadClass(String name, Class<T> clazz) throws ClassNotFoundException {
