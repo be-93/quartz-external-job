@@ -1,11 +1,8 @@
-package com.scheduler.batch.batchUtils;
+package com.batch.batchUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
+import org.quartz.*;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.JobLocator;
@@ -14,13 +11,14 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.stereotype.Component;
 
-import static com.scheduler.batch.batchUtils.JobUtils.getQuartzJobName;
-import static com.scheduler.batch.batchUtils.JobUtils.getQuartzJobParameters;
+import static com.batch.batchUtils.JobUtils.*;
 
 
 @Slf4j
 @RequiredArgsConstructor
+@DisallowConcurrentExecution
 public class BatchJobExecutor implements Job {
 
     private final JobLocator jobLocator;

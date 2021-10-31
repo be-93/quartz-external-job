@@ -21,14 +21,14 @@ public class TestJob {
 
     @Bean
     public Job job1() {
-        return jobBuilderFactory.get("job1")
+        return jobBuilderFactory.get("TestJob-job1")
                 .start(step1())
                 .build();
     }
 
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("step1")
+        return stepBuilderFactory.get("TestJob-step1")
                 .tasklet((contribution, chunkContext) -> {
                     log.info(">>>>> This is Step1");
                     return RepeatStatus.FINISHED;

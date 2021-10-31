@@ -7,7 +7,6 @@ spring:
   config:
     activate:
       on-profile: local
-
   datasource:
     internal:
       hikari:
@@ -21,7 +20,7 @@ spring:
         persistence-unit-name: internal
         entity-path: com.internal.entity
         database-platform: org.hibernate.dialect.H2Dialect
-        ddl-auto: create-drop
+        ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
@@ -37,7 +36,7 @@ spring:
         persistence-unit-name: external
         entity-path: com.external.entity
         database-platform: org.hibernate.dialect.H2Dialect
-        ddl-auto: create-drop
+        ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
@@ -57,11 +56,8 @@ spring:
     job-store-type: jdbc
     jdbc:
       initialize-schema: always # always 초기화 이후 never 로 변경
-      schema: classpath:db/schema.sql
-
-
-
-
+  batch:
+    initialize-schema: always
 
 logging.level:
   org.hibernate.SQL: debug

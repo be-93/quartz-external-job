@@ -83,6 +83,7 @@ project(":core") {
 project(":scheduler") {
     dependencies {
         compile project(':core')
+        compile project(':batch-job')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
@@ -99,7 +100,6 @@ project(":scheduler") {
 project(":batch-job") {
     dependencies {
         compile project(':core')
-        compile project(':scheduler')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'

@@ -1,4 +1,4 @@
-package com.scheduler.batch.batchUtils;
+package com.batch.batchUtils;
 
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
