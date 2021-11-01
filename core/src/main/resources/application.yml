@@ -58,6 +58,8 @@ spring:
       initialize-schema: always # always 초기화 이후 never 로 변경
   batch:
     initialize-schema: always
+    job:
+      enabled: false
 
 logging.level:
   org.hibernate.SQL: debug
