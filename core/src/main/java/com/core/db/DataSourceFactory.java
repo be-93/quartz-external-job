@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class DataSourceFactory {
 
-    public DataSource generateDataSource(DataSourceProperties properties) {
+    public static DataSource createDataSource(DataSourceProperties properties) {
         HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
         dataSource.setDataSource(new LazyConnectionDataSourceProxy(properties
                                 .initializeDataSourceBuilder()
@@ -26,12 +26,12 @@ public class DataSourceFactory {
         return dataSource;
     }
 
-    public EntityManagerFactoryBuilder generateEntityManagerFactoryBuilder(
+    public static EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(
             HibernateJpaVendorAdapter hibernateJpaVendorAdapter, Map<String, String> hashMap) {
         return new EntityManagerFactoryBuilder(hibernateJpaVendorAdapter, hashMap, null);
     }
     
-    public LocalContainerEntityManagerFactoryBean generateEntityManagerFactory(
+    public static LocalContainerEntityManagerFactoryBean createEntityManagerFactory(
             EntityManagerFactoryBuilder builder, DataSource dataSource
             , String entityPath, String persistenceUnitName, Map<String, Object> properties) {
         return builder
@@ -42,7 +42,7 @@ public class DataSourceFactory {
                 .build();
     }
 
-    public PlatformTransactionManager generateTransactionManager(EntityManagerFactory entityManagerFactory) {
+    public static PlatformTransactionManager createTransactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
