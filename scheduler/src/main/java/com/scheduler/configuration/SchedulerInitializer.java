@@ -1,6 +1,5 @@
-package com.scheduler.configuration.init;
+package com.scheduler.configuration;
 
-import com.batch.batchUtils.BatchJobExecutor;
 import com.scheduler.quartzUtils.JobRequest;
 import lombok.RequiredArgsConstructor;
 import org.quartz.JobDataMap;
@@ -18,7 +17,7 @@ import static com.scheduler.quartzUtils.JobUtils.createTrigger;
 
 @Component
 @RequiredArgsConstructor
-public class TestInit implements ApplicationListener<ContextRefreshedEvent> {
+public class SchedulerInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
     private final ApplicationContext context;
 
@@ -27,13 +26,10 @@ public class TestInit implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         try {
-            JobDataMap jobDataMap = new JobDataMap();
-            jobDataMap.put("job", "TestJob-job1");
             JobRequest jobRequest = JobRequest
                     .builder()
                     .cronExpression("*/5 * * * * ?")
-                    .jobName("job1")
-                    .jobDataMap(jobDataMap)
+                    .jobName("test")
                     .build();
 
             JobDetail job1 = createJob(jobRequest, BatchJobExecutor.class, context);

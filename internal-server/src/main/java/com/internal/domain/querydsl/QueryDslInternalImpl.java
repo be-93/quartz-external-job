@@ -1,7 +1,7 @@
-package com.internal.repository.querydsl;
+package com.internal.domain.querydsl;
 
 import com.core.jpa.querydsl.QueryDslRepositorySupportWrapper;
-import com.internal.entity.InternalTest;
+import com.internal.domain.InternalTest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-import static com.internal.entity.QInternalTest.internalTest;
+import static com.internal.domain.QInternalTest.internalTest;
 
 @Repository
 public class QueryDslInternalImpl extends QueryDslRepositorySupportWrapper implements QueryDslInternalRepository {

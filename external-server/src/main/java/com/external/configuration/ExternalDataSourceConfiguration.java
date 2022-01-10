@@ -46,14 +46,14 @@ public class ExternalDataSourceConfiguration extends DataSourceFactory {
 
     @Bean(name = "externalDataSource")
     public DataSource dataSource(@Qualifier("externalDataSourceProperties") DataSourceProperties properties) {
-        return this.generateDataSource(properties);
+        return this.createDataSource(properties);
     }
 
     @Bean(name = "externalEntityManagerFactoryBuilder")
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = getHibernateJpaVendorAdapter();
         JpaProperties jpaProperties = getJpaProperties();
-        return this.generateEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
+        return this.createEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
     }
 
     @Bean(name = "externalEntityManagerFactory")
@@ -62,14 +62,14 @@ public class ExternalDataSourceConfiguration extends DataSourceFactory {
             , @Qualifier("externalDataSource") DataSource dataSource) {
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", externalJpaProperty.getDdlAuto());
-        return this.generateEntityManagerFactory(builder, dataSource,
+        return this.createEntityManagerFactory(builder, dataSource,
                 externalJpaProperty.getEntityPath(), externalJpaProperty.getPersistenceUnitName(), properties);
     }
 
     @Bean(name = "externalTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("externalEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return this.generateTransactionManager(entityManagerFactory);
+        return this.createTransactionManager(entityManagerFactory);
     }
 
     private HibernateJpaVendorAdapter getHibernateJpaVendorAdapter() {

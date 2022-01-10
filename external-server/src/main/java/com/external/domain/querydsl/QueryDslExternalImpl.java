@@ -1,14 +1,14 @@
-package com.external.repository.querydsl;
+package com.external.domain.querydsl;
 
 import com.core.jpa.querydsl.QueryDslRepositorySupportWrapper;
-import com.external.entity.ExternalTest;
+import com.external.domain.ExternalTest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.external.entity.QExternalTest.externalTest;
+import static com.external.domain.QExternalTest.externalTest;
 
 @Repository
 public class QueryDslExternalImpl extends QueryDslRepositorySupportWrapper implements QueryDslExternalRepository {

@@ -1,4 +1,4 @@
-package com.scheduler.configuration.quartz;
+package com.scheduler.configuration;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.BeansException;

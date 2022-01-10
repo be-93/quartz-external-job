@@ -49,7 +49,7 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     @Primary
     @Bean(name = "internalDataSource")
     public DataSource dataSource(@Qualifier("internalDataSourceProperties") DataSourceProperties properties) {
-        return this.generateDataSource(properties);
+        return this.createDataSource(properties);
     }
 
     @Primary
@@ -57,7 +57,7 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = getHibernateJpaVendorAdapter();
         JpaProperties jpaProperties = getJpaProperties();
-        return this.generateEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
+        return this.createEntityManagerFactoryBuilder(hibernateJpaVendorAdapter, jpaProperties.getProperties());
     }
 
     @Primary
@@ -67,7 +67,7 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
             , @Qualifier("internalDataSource") DataSource dataSource) {
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", internalJpaProperty.getDdlAuto());
-        return this.generateEntityManagerFactory(builder, dataSource,
+        return this.createEntityManagerFactory(builder, dataSource,
                 internalJpaProperty.getEntityPath(), internalJpaProperty.getPersistenceUnitName(), properties);
     }
 
@@ -75,7 +75,7 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     @Bean(name = "internalTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("internalEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return this.generateTransactionManager(entityManagerFactory);
+        return this.createTransactionManager(entityManagerFactory);
     }
 
     private HibernateJpaVendorAdapter getHibernateJpaVendorAdapter() {

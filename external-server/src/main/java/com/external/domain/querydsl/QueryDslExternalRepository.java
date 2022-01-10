@@ -1,6 +1,6 @@
-package com.external.repository.querydsl;
+package com.external.domain.querydsl;
 
-import com.external.entity.ExternalTest;
+import com.external.domain.ExternalTest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

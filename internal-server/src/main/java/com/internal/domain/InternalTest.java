@@ -1,4 +1,4 @@
-package com.internal.entity;
+package com.internal.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

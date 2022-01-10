@@ -1,6 +1,6 @@
-package com.internal.repository;
+package com.internal.domain;
 
-import com.internal.entity.InternalTest;
+import com.internal.domain.InternalTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

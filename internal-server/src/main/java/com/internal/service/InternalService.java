@@ -1,7 +1,7 @@
 package com.internal.service;
 
-import com.internal.entity.InternalTest;
-import com.internal.repository.querydsl.QueryDslInternalRepository;
+import com.internal.domain.InternalTest;
+import com.internal.domain.querydsl.QueryDslInternalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
