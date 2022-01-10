@@ -7,61 +7,36 @@ spring:
   config:
     activate:
       on-profile: local
-
-#  quartz:
-#    overwrite-existing-jobs: true
-#    scheduler-name: scheduler
-#    job-store-type: jdbc
-#    jdbc:
-#      initialize-schema: always # always 초기화 이후 never 로 변경
-
-  quartz:
-    overwrite-existing-jobs: true
-    scheduler-name: scheduler
-    job-store-type: jdbc
-    jdbc:
-      initialize-schema: always # always 초기화 이후 never 로 변경
-    properties:
-      org:
-        quartz:
-          jobStore:
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
-
-  batch:
-    initialize-schema: always
-    job:
-      enabled: false
-
   datasource:
     internal:
       hikari:
-        jdbc-url: jdbc:postgresql://192.168.10.20:5432/QRAY
-        username: qray
-        password: ensys1212
+        jdbc-url: jdbc:h2:tcp://localhost/~/internal
+        username: sa
+        password: #local - password
         minimum-idle: 10
         maximum-pool-size: 10
-        driver-class-name: org.postgresql.Driver
+        driver-class-name: org.h2.Driver
       jpa:
         persistence-unit-name: internal
-        entity-path: com.internal.domain
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: none # 함부로 변경 금지
+        entity-path: com.internal.entity
+        database-platform: org.hibernate.dialect.H2Dialect
+        ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
     external:
       hikari:
-        jdbc-url: jdbc:sqlserver://192.168.10.20:1433;databaseName=NEOE;
-        username: NEOEB
-        password: NEOEB
+        jdbc-url: jdbc:h2:tcp://localhost/~/external
+        username: sa
+        password: #local - password
         minimum-idle: 10
         maximum-pool-size: 10
-        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        driver-class-name: org.h2.Driver
       jpa:
         persistence-unit-name: external
-        entity-path: com.external.domain
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        ddl-auto: none # 함부로 변경 금지
+        entity-path: com.external.entity
+        database-platform: org.hibernate.dialect.H2Dialect
+        ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
@@ -75,6 +50,16 @@ spring:
         minimum-idle: 10
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
+  quartz:
+    overwrite-existing-jobs: true
+    scheduler-name: scheduler
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always # always 초기화 이후 never 로 변경
+  batch:
+    initialize-schema: always
+    job:
+      enabled: false
 
 logging.level:
   org.hibernate.SQL: debug
