@@ -1,5 +1,6 @@
 package com.scheduler.configuration;
 
+import com.batch.job.MigrationBatch;
 import com.scheduler.quartzUtils.JobRequest;
 import lombok.RequiredArgsConstructor;
 import org.quartz.JobDataMap;
@@ -29,7 +30,7 @@ public class SchedulerInitializer implements ApplicationListener<ContextRefreshe
             JobRequest jobRequest = JobRequest
                     .builder()
                     .cronExpression("*/5 * * * * ?")
-                    .jobName("test")
+                    .jobName(MigrationBatch.JOB_NAME)
                     .build();
 
             JobDetail job1 = createJob(jobRequest, BatchJobExecutor.class, context);

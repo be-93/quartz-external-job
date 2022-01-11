@@ -7,6 +7,19 @@ spring:
   config:
     activate:
       on-profile: local
+
+  quartz:
+    overwrite-existing-jobs: true
+    scheduler-name: scheduler
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always # always 초기화 이후 never 로 변경
+
+  batch:
+    initialize-schema: always
+    job:
+      enabled: false
+
   datasource:
     internal:
       hikari:
@@ -14,11 +27,11 @@ spring:
         username: sa
         password: #local - password
         minimum-idle: 10
-        maximum-pool-size: 10
+        maximum-pool-size: 50
         driver-class-name: org.h2.Driver
       jpa:
         persistence-unit-name: internal
-        entity-path: com.internal.entity
+        entity-path: com.internal.domain
         database-platform: org.hibernate.dialect.H2Dialect
         ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
@@ -30,11 +43,11 @@ spring:
         username: sa
         password: #local - password
         minimum-idle: 10
-        maximum-pool-size: 10
+        maximum-pool-size: 50
         driver-class-name: org.h2.Driver
       jpa:
         persistence-unit-name: external
-        entity-path: com.external.entity
+        entity-path: com.external.domain
         database-platform: org.hibernate.dialect.H2Dialect
         ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
@@ -50,16 +63,6 @@ spring:
         minimum-idle: 10
         maximum-pool-size: 10
         driver-class-name: org.h2.Driver
-  quartz:
-    overwrite-existing-jobs: true
-    scheduler-name: scheduler
-    job-store-type: jdbc
-    jdbc:
-      initialize-schema: always # always 초기화 이후 never 로 변경
-  batch:
-    initialize-schema: always
-    job:
-      enabled: false
 
 logging.level:
   org.hibernate.SQL: debug

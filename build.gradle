@@ -100,8 +100,11 @@ project(":scheduler") {
 project(":batch-job") {
     dependencies {
         compile project(':core')
+        compile project(':internal-server')
+        compile project(':external-server')
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.springframework.boot:spring-boot-starter-quartz'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     }
     bootJar { enabled = false }
@@ -116,6 +119,7 @@ project(":batch-job") {
 project(":internal-server") {
     dependencies {
         compile project(':core')
+        compile project(':external-server')
         implementation 'org.springframework.boot:spring-boot-starter-web'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         runtimeOnly 'com.h2database:h2'
@@ -145,6 +149,7 @@ project(":api") {
         compile project(':internal-server')
         compile project(':external-server')
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
     bootJar { enabled = true }
     jar { enabled = false}

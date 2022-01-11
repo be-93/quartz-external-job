@@ -9,17 +9,13 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "internal_test")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "internal")
 public class InternalTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Builder(builderMethodName = "internalBuilder")
-    public InternalTest(int id) {
-        this.id = id;
+    public InternalTest() {
     }
-
 }

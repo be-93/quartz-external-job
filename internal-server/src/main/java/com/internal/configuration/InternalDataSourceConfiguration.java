@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.jdbc.DataSourceInitializationMode;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,14 +25,14 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@EnableJpaRepositories(basePackages = {"com.internal.repository"}
+@EnableJpaRepositories(basePackages = {"com.internal.domain"}
         , entityManagerFactoryRef = "internalEntityManagerFactory"
         , transactionManagerRef = "internalTransactionManager"
 )
 public class InternalDataSourceConfiguration extends DataSourceFactory {
 
-    final private InternalDataSourceProperty internalDataSourceProperty;
-    final private InternalJpaProperty internalJpaProperty;
+    private final InternalDataSourceProperty internalDataSourceProperty;
+    private final InternalJpaProperty internalJpaProperty;
 
     @Primary
     @Bean(name = "internalDataSourceProperties")
@@ -41,6 +42,7 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
         dataSourceProperties.setUrl(internalDataSourceProperty.getJdbcUrl());
         dataSourceProperties.setUsername(internalDataSourceProperty.getUsername());
         dataSourceProperties.setPassword(internalDataSourceProperty.getPassword());
+
         log.info("[internalDataSourceProperties] driver-class-name : {} , url : {}, username : {}",
                 internalDataSourceProperty.getDriverClassName(), internalDataSourceProperty.getJdbcUrl(), internalDataSourceProperty.getUsername());
         return dataSourceProperties;

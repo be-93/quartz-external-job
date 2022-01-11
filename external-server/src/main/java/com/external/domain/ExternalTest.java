@@ -9,17 +9,13 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "external_test")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "external")
 public class ExternalTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Builder(builderMethodName = "externalBuilder")
-    public ExternalTest(int id) {
-        this.id = id;
+    public ExternalTest() {
     }
-
 }

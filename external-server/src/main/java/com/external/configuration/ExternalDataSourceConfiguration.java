@@ -23,14 +23,14 @@ import java.util.HashMap;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@EnableJpaRepositories(basePackages = {"com.external.repository"}
+@EnableJpaRepositories(basePackages = {"com.external.domain"}
         , entityManagerFactoryRef = "externalEntityManagerFactory"
         , transactionManagerRef = "externalTransactionManager"
 )
 public class ExternalDataSourceConfiguration extends DataSourceFactory {
 
-    final private ExternalDataSourceProperty externalDataSourceProperty;
-    final private ExternalJpaProperty externalJpaProperty;
+    private final ExternalDataSourceProperty externalDataSourceProperty;
+    private final ExternalJpaProperty externalJpaProperty;
 
     @Bean(name = "externalDataSourceProperties")
     public DataSourceProperties getDataSourceProperties() {
