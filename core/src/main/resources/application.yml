@@ -3,6 +3,11 @@ spring:
     active: local
 
 ---
+## docker install
+# docker pull postgres
+# docker run --name internal -d -p 5432:5432 -e POSTGRES_PASSWORD="1234" postgres
+# docker run --name external -d -p 5433:5432 -e POSTGRES_PASSWORD="1234" postgres
+
 spring:
   config:
     activate:
@@ -14,6 +19,11 @@ spring:
     job-store-type: jdbc
     jdbc:
       initialize-schema: always # always 초기화 이후 never 로 변경
+    properties:
+      org:
+        quartz:
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
 
   batch:
     initialize-schema: always
@@ -23,32 +33,32 @@ spring:
   datasource:
     internal:
       hikari:
-        jdbc-url: jdbc:h2:tcp://localhost/~/internal
-        username: sa
-        password: #local - password
+        jdbc-url: jdbc:postgresql://localhost:5432/internal
+        username: postgres
+        password: 1234
         minimum-idle: 10
         maximum-pool-size: 50
-        driver-class-name: org.h2.Driver
+        driver-class-name: org.postgresql.Driver
       jpa:
         persistence-unit-name: internal
         entity-path: com.internal.domain
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
     external:
       hikari:
-        jdbc-url: jdbc:h2:tcp://localhost/~/external
-        username: sa
-        password: #local - password
+        jdbc-url: jdbc:postgresql://localhost:5433/external
+        username: postgres
+        password: 1234
         minimum-idle: 10
         maximum-pool-size: 50
-        driver-class-name: org.h2.Driver
+        driver-class-name: org.postgresql.Driver
       jpa:
         persistence-unit-name: external
         entity-path: com.external.domain
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: create
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
