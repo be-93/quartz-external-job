@@ -33,19 +33,27 @@ spring:
   datasource:
     internal:
       hikari:
-        jdbc-url: jdbc:postgresql://localhost:5432/internal
+        jdbc-url: jdbc:postgresql://localhost:5432/internal?reWriteBatchedInserts=true
         username: postgres
         password: 1234
         minimum-idle: 10
         maximum-pool-size: 50
         driver-class-name: org.postgresql.Driver
+        data-source-properties:
+          rewriteBatchedStatements: true
       jpa:
         persistence-unit-name: internal
         entity-path: com.internal.domain
         database-platform: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: create
-        format-sql: true # 쿼리 형태를 보정
+        ddl-auto: update
+        format-sql: false # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
+        properties:
+          hibernate:
+            jdbc:
+              batch_size: 1000
+            order_inserts: true
+            order_updates: true
 
     external:
       hikari:
@@ -59,7 +67,7 @@ spring:
         persistence-unit-name: external
         entity-path: com.external.domain
         database-platform: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: create
+        ddl-auto: update
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 

@@ -90,6 +90,9 @@ public class InternalDataSourceConfiguration extends DataSourceFactory {
     private JpaProperties getJpaProperties() {
         HashMap<String, String> map = new HashMap<>();
         map.put("hibernate.format_sql", String.valueOf(internalJpaProperty.isFormatSql()));
+        map.put("hibernate.jdbc.batch_size", String.valueOf(internalJpaProperty.getBatchSize()));
+        map.put("hibernate.order_inserts", String.valueOf(internalJpaProperty.isOrderInserts()));
+        map.put("hibernate.order_updates", String.valueOf(internalJpaProperty.isOrderUpdates()));
         JpaProperties jpaProperties = new JpaProperties();
         jpaProperties.setDatabasePlatform(internalJpaProperty.getDatabasePlatform());
         jpaProperties.setShowSql(internalJpaProperty.isShowSql());

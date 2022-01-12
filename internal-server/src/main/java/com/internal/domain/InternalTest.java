@@ -9,13 +9,20 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "internal")
+@Table(name = "internal_table")
 public class InternalTest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    public InternalTest() {
+    private String name;
+
+    protected InternalTest() {
+    }
+
+    public InternalTest(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

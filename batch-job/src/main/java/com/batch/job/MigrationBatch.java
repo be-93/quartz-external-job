@@ -2,6 +2,7 @@ package com.batch.job;
 
 import com.external.domain.ExternalTest;
 import com.internal.domain.InternalTest;
+import com.internal.domain.InternalTestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.*;
@@ -28,17 +29,21 @@ public class MigrationBatch {
     private final LocalContainerEntityManagerFactoryBean externalEntityManagerFactory;
     private final LocalContainerEntityManagerFactoryBean internalEntityManagerFactory;
     private final PlatformTransactionManager internalTransactionManager;
+    private final InternalTestRepository internalTestRepository;
+
     private final int chunkSize = 10;
 
     public MigrationBatch(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
                           @Qualifier("externalEntityManagerFactory") LocalContainerEntityManagerFactoryBean externalEntityManagerFactory,
                           @Qualifier("internalEntityManagerFactory") LocalContainerEntityManagerFactoryBean internalEntityManagerFactory,
-                          @Qualifier("internalTransactionManager") PlatformTransactionManager internalTransactionManager) {
+                          @Qualifier("internalTransactionManager") PlatformTransactionManager internalTransactionManager,
+                          InternalTestRepository internalTestRepository) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.externalEntityManagerFactory = externalEntityManagerFactory;
         this.internalEntityManagerFactory = internalEntityManagerFactory;
         this.internalTransactionManager = internalTransactionManager;
+        this.internalTestRepository = internalTestRepository;
     }
 
     @Bean
@@ -77,7 +82,7 @@ public class MigrationBatch {
     @StepScope
     public ItemProcessor<ExternalTest, InternalTest> pagingProcessor() {
         return item -> {
-            return new InternalTest();
+            return new InternalTest(item.getId(), item.getName());
         };
     }
 

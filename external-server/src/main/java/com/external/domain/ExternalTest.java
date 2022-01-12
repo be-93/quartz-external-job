@@ -9,13 +9,19 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "external")
+@Table(name = "external_table")
 public class ExternalTest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    public ExternalTest() {
+    private String name;
+
+    protected ExternalTest() {
+    }
+
+    public ExternalTest(String name) {
+        this.name = name;
     }
 }
