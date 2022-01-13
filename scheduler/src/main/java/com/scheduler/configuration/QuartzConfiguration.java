@@ -15,9 +15,10 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+import static com.internal.configuration.InternalDataSourceConfiguration.INTERNAL_DATASOURCE;
+
 @Slf4j
 @Configuration
-@RequiredArgsConstructor
 public class QuartzConfiguration {
 
 	/**
@@ -25,9 +26,13 @@ public class QuartzConfiguration {
 	 * Default: internalDataSource 으로 설정
 	 * 스케줄을 다른 디비에서 설정할 경우 DataSource 생성 하여 주입이 필요함.
 	 */
-	@Qualifier("internalDataSource")
 	private final DataSource dataSource;
 	private final QuartzProperties quartzProperties;
+
+	public QuartzConfiguration(@Qualifier(INTERNAL_DATASOURCE) DataSource dataSource, QuartzProperties quartzProperties) {
+		this.dataSource = dataSource;
+		this.quartzProperties = quartzProperties;
+	}
 
 	@Bean
 	public SchedulerFactoryBean schedulerFactoryBean(ApplicationContext applicationContext) {

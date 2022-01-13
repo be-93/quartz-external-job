@@ -30,46 +30,45 @@ spring:
     job:
       enabled: false
 
-  datasource:
-    internal:
+  internal:
+    datasource:
       hikari:
-        jdbc-url: jdbc:postgresql://192.168.10.20:5432/QRAY
-        username: qray
-        password: ensys1212
+        jdbc-url: jdbc:postgresql://localhost:5432/internal?reWriteBatchedInserts=true
+        username: postgres
+        password: 1234
         minimum-idle: 10
         maximum-pool-size: 50
         driver-class-name: org.postgresql.Driver
         data-source-properties:
           rewriteBatchedStatements: true
       jpa:
-        persistence-unit-name: internal
-        entity-path: com.internal.domain
+        hibernate:
+          ddl-auto: update
         database-platform: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: update
-        format-sql: false # 쿼리 형태를 보정
-        show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
         properties:
           hibernate:
+            format_sql: true
             jdbc:
               batch_size: 1000
             order_inserts: true
             order_updates: true
 
-    external:
+  external:
+    datasource:
       hikari:
-        jdbc-url: jdbc:sqlserver://192.168.10.20:1433;databaseName=NEOE;
-        username: NEOEB
-        password: NEOEB
+        jdbc-url: jdbc:postgresql://localhost:5433/external
+        username: postgres
+        password: 1234
         minimum-idle: 10
-        maximum-pool-size: 10
-        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        maximum-pool-size: 50
+        driver-class-name: org.postgresql.Driver
       jpa:
-        persistence-unit-name: external
-        entity-path: com.external.domain
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        ddl-auto: update # 함부로 변경 금지
-        format-sql: true # 쿼리 형태를 보정
-        show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
+        hibernate:
+          ddl-auto: update
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        properties:
+          hibernate:
+            format_sql: true
 
     ## internal 설정을 의존성을 가지도록 설정
     ## 다른 디비에 의존해야 한다면 데이터소스 생성하여 주입하여야함.

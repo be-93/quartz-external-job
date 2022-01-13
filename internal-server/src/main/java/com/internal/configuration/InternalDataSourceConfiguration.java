@@ -1,14 +1,13 @@
 package com.internal.configuration;
 
-import com.internal.yml.InternalDataSourceProperty;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 
@@ -17,22 +16,13 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties
 public class InternalDataSourceConfiguration {
 
-    public static final String INTERNAL_DATASOURCE_PREFIX = "spring.internal.datasource";
+    public static final String INTERNAL_DATASOURCE_PREFIX = "spring.internal.datasource.hikari";
+    public static final String INTERNAL_JPA_PREFIX = "spring.internal.datasource.jpa";
+    public static final String INTERNAL_JPA_HIBERNATE_PREFIX = "spring.internal.datasource.jpa.hibernate";
     public static final String INTERNAL_DATASOURCE_PROPERTIES = "internalDataSourceProperties";
     public static final String INTERNAL_DATASOURCE = "internalDataSource";
 
-    private final InternalDataSourceProperty internalDataSourceProperty;
-
-    @Bean(name = INTERNAL_DATASOURCE_PROPERTIES)
-    public DataSourceProperties dataSourceProperties() {
-        DataSourceProperties dataSourceProperties = new DataSourceProperties();
-        dataSourceProperties.setDriverClassName(internalDataSourceProperty.getDriverClassName());
-        dataSourceProperties.setUrl(internalDataSourceProperty.getJdbcUrl());
-        dataSourceProperties.setUsername(internalDataSourceProperty.getUsername());
-        dataSourceProperties.setPassword(internalDataSourceProperty.getPassword());
-        return dataSourceProperties;
-    }
-
+    @Primary
     @Bean(name = INTERNAL_DATASOURCE)
     @ConfigurationProperties(prefix = INTERNAL_DATASOURCE_PREFIX)
     public DataSource dataSource() {
