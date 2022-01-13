@@ -8,15 +8,22 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -31,7 +38,7 @@ public class MigrationBatch {
     private final PlatformTransactionManager internalTransactionManager;
     private final InternalTestRepository internalTestRepository;
 
-    private final int chunkSize = 10;
+    private final int chunkSize = 100;
 
     public MigrationBatch(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
                           @Qualifier("externalEntityManagerFactory") LocalContainerEntityManagerFactoryBean externalEntityManagerFactory,
@@ -62,18 +69,19 @@ public class MigrationBatch {
                 .transactionManager(internalTransactionManager)
                 .<ExternalTest, InternalTest>chunk(chunkSize)
                 .reader(pagingReader())
-                .processor(pagingProcessor())
+//                .processor(pagingProcessor())
                 .writer(writer())
                 .build();
     }
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<ExternalTest> pagingReader() {
-        return new JpaPagingItemReaderBuilder<ExternalTest>()
-                .queryString("select u from ExternalTest u")
-                .pageSize(chunkSize)
-                .entityManagerFactory(externalEntityManagerFactory.getObject())
+    public JdbcCursorItemReader<ExternalTest> pagingReader() {
+        return new JdbcCursorItemReaderBuilder<ExternalTest>()
+                .sql("select u from external_table u")
+                .rowMapper(new BeanPropertyRowMapper<>(ExternalTest.class))
+                .fetchSize(chunkSize)
+                .dataSource(externalEntityManagerFactory.getDataSource())
                 .name("pagingReader")
                 .build();
     }
@@ -88,9 +96,12 @@ public class MigrationBatch {
 
     @Bean
     @StepScope
-    public JpaItemWriter<InternalTest> writer() {
-        JpaItemWriter<InternalTest> writer = new JpaItemWriter<>();
-        writer.setEntityManagerFactory(internalEntityManagerFactory.getObject());
+    public JdbcBatchItemWriter<InternalTest> writer() {
+        List<ExternalTest> list = new ArrayList<>();
+
+        JdbcBatchItemWriter<InternalTest> writer = new JdbcBatchItemWriter<>();
+        writer.setSql("insert into internal_table(id, name) values (:id, :name) on conflict (name) do nothing;");
+        writer.setDataSource(internalEntityManagerFactory.getDataSource());
         return writer;
     }
 

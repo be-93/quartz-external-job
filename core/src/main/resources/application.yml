@@ -33,9 +33,9 @@ spring:
   datasource:
     internal:
       hikari:
-        jdbc-url: jdbc:postgresql://localhost:5432/internal?reWriteBatchedInserts=true
-        username: postgres
-        password: 1234
+        jdbc-url: jdbc:postgresql://192.168.10.20:5432/QRAY
+        username: qray
+        password: ensys1212
         minimum-idle: 10
         maximum-pool-size: 50
         driver-class-name: org.postgresql.Driver
@@ -57,17 +57,17 @@ spring:
 
     external:
       hikari:
-        jdbc-url: jdbc:postgresql://localhost:5433/external
-        username: postgres
-        password: 1234
+        jdbc-url: jdbc:sqlserver://192.168.10.20:1433;databaseName=NEOE;
+        username: NEOEB
+        password: NEOEB
         minimum-idle: 10
-        maximum-pool-size: 50
-        driver-class-name: org.postgresql.Driver
+        maximum-pool-size: 10
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
       jpa:
         persistence-unit-name: external
         entity-path: com.external.domain
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: update
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        ddl-auto: update # 함부로 변경 금지
         format-sql: true # 쿼리 형태를 보정
         show-sql: false # true 로 설정시 System.out 로 출력되기에 좋지 않다.
 
